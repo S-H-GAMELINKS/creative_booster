@@ -14,7 +14,7 @@ keywords = ENV['KEYWORDS'].split(',')
 
 keywords.each do |keyword|
   begin
-    client.hashtag_timeline(keyword, limit: 50000).each do
+    client.hashtag_timeline(keyword, limit: 100).each do
       client.reblog(_1.id)
       client.favourite(_1.id)
     end
