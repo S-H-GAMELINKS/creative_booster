@@ -20,7 +20,6 @@ end
 every(60.minutes, 'boost.job') do 
   client = Mastodon::REST::Client.new(base_url: ENV['MASTODON_URL'], bearer_token: ENV['ACCESS_TOKEN'])
   keywords = ENV['KEYWORDS'].split(',')
-
   keywords.each do |keyword|
     begin
       client.hashtag_timeline(keyword, limit: 100).each do
