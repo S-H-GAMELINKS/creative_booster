@@ -16,8 +16,8 @@ handler do |job|
   puts "Running #{job}"
 end
 
-# 30分ごとにジョブを実行
-every(30.minutes, 'boost.job') do 
+# 60分ごとにジョブを実行
+every(60.minutes, 'boost.job') do 
   client = Mastodon::REST::Client.new(base_url: ENV['MASTODON_URL'], bearer_token: ENV['ACCESS_TOKEN'])
   keywords = ENV['KEYWORDS'].split(',')
   keywords.each do |keyword|
