@@ -25,6 +25,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    activemodel (7.0.4)
+      activesupport (= 7.0.4)
+    activerecord (7.0.4)
+      activemodel (= 7.0.4)
+      activesupport (= 7.0.4)
     activesupport (7.0.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
@@ -70,6 +75,7 @@ GEM
     method_source (1.0.0)
     mini_portile2 (2.8.1)
     minitest (5.17.0)
+    mutex_m (0.3.0)
     nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
@@ -92,6 +98,8 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
+    sqlite3 (1.7.3)
+      mini_portile2 (~> 2.8.0)
     thor (1.2.1)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
@@ -104,11 +112,14 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord (~> 7.0)
   base64 (~> 0.3.0)
   bigdecimal (~> 3.2)
   clockwork
   dotenv-rails
   mastodon-api!
+  mutex_m (~> 0.3.0)
+  sqlite3 (~> 1.4)
 
 BUNDLED WITH
    2.3.26
