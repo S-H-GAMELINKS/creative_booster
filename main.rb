@@ -23,7 +23,6 @@ hashtags = Hashtag.active.pluck(:name)
 
 if hashtags.empty?
   logger.warn "No active hashtags found in database"
-  next
 end
 
 hashtags.each do |hashtag|
