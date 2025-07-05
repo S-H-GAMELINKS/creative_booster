@@ -1,6 +1,7 @@
-require 'mastodon'
+require 'kisa'
 require 'dotenv'
 require 'logger'
+require 'uri'
 require_relative 'models'
 
 # 環境変数の読み込み
@@ -16,7 +17,7 @@ if ENV['KEYWORDS']
   end
 end
 
-client = Mastodon::REST::Client.new(base_url: ENV['MASTODON_URL'], bearer_token: ENV['ACCESS_TOKEN'])
+client = Kisa.new(url: ENV['MASTODON_URL'], headers: { 'Authorization' => "Bearer #{ENV['ACCESS_TOKEN']}" })
 
 # データベースからアクティブなハッシュタグを取得
 hashtags = Hashtag.active.pluck(:name)
@@ -35,7 +36,7 @@ hashtags.each do |hashtag|
     options = { limit: 100 }
     options[:since_id] = since_id if since_id
 
-    statuses = client.hashtag_timeline(hashtag, options)
+    statuses = client.hashtag_timeline(URI.encode_www_form_component(hashtag), limit: options[:limit], since_id: options[:since_id])
 
     if statuses.size == 0
       logger.info "No new statuses for hashtag: #{hashtag}"
@@ -47,28 +48,28 @@ hashtags.each do |hashtag|
 
     statuses.each do |status|
       # 最新のステータスIDを記録（最初の要素が最新）
-      latest_status_id ||= status.id
+      latest_status_id ||= status['id']
       # 既にリブログ済みかチェック
-      if RebloggedStatus.exists?(status_id: status.id)
-        logger.info "Status #{status.id} already reblogged, skipping"
+      if RebloggedStatus.exists?(status_id: status['id'])
+        logger.info "Status #{status['id']} already reblogged, skipping"
         next
       end
 
       # ブーストとお気に入り
-      client.reblog(status.id)
-      client.favourite(status.id)
+      client.boost(status['id'])
+      client.favourite(status['id'])
 
       # リブログ履歴を保存
-      status_hashtags = status.tags ? status.tags.map(&:name).map(&:downcase) : []
+      status_hashtags = status['tags'] ? status['tags'].map { |tag| tag['name'].downcase } : []
       RebloggedStatus.create!(
-        status_id: status.id,
+        status_id: status['id'],
         hashtags: status_hashtags
       )
 
       # ハッシュタグを収集
       new_hashtags.concat(status_hashtags) if status_hashtags.any?
 
-      logger.info "Reblogged status #{status.id} with hashtags: #{status_hashtags.join(', ')}"
+      logger.info "Reblogged status #{status['id']} with hashtags: #{status_hashtags.join(', ')}"
     end
 
     # 一括でハッシュタグを処理

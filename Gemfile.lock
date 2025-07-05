@@ -1,13 +1,9 @@
 GIT
-  remote: https://github.com/S-H-GAMELINKS/mastodon-api.git
-  revision: 3502cdf3756d92d2c72b43b031340fad1c53eafc
-  branch: support/after_2.7_3.1_ruby
+  remote: https://github.com/S-H-GAMELINKS/kisa.git
+  revision: 9bcc3cccd289057d2091530bac74717f5e8e718d
+  branch: master
   specs:
-    mastodon-api (2.0.0)
-      addressable (~> 2.6)
-      buftok (~> 0)
-      http (~> 4.0)
-      oj (~> 3.7)
+    kisa (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -35,37 +31,26 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.1)
-      public_suffix (>= 2.0.2, < 6.0)
     base64 (0.3.0)
     bigdecimal (3.2.2)
-    buftok (0.3.0)
     builder (3.2.4)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
-    domain_name (0.5.20190701)
-      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
     erubi (1.12.0)
-    ffi (1.15.5)
-    ffi-compiler (1.0.1)
-      ffi (>= 1.0.0)
-      rake
-    http (4.4.1)
-      addressable (~> 2.3)
-      http-cookie (~> 1.0)
-      http-form_data (~> 2.2)
-      http-parser (~> 1.2.0)
-    http-cookie (1.0.5)
-      domain_name (~> 0.5)
-    http-form_data (2.3.0)
-    http-parser (1.2.3)
-      ffi-compiler (>= 1.0, < 2.0)
+    faraday (2.13.2)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.1)
+      net-http (>= 0.5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    json (2.12.2)
+    logger (1.7.0)
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -73,11 +58,11 @@ GEM
     mini_portile2 (2.8.1)
     minitest (5.17.0)
     mutex_m (0.3.0)
+    net-http (0.6.0)
+      uri
     nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    oj (3.13.23)
-    public_suffix (5.0.1)
     racc (1.6.2)
     rack (2.2.5)
     rack-test (2.0.2)
@@ -100,9 +85,7 @@ GEM
     thor (1.2.1)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.8.2)
+    uri (1.0.3)
     zeitwerk (2.6.6)
 
 PLATFORMS
@@ -113,7 +96,8 @@ DEPENDENCIES
   base64 (~> 0.3.0)
   bigdecimal (~> 3.2)
   dotenv-rails
-  mastodon-api!
+  faraday (~> 2.13)
+  kisa!
   mutex_m (~> 0.3.0)
   sqlite3 (~> 1.4)
 
