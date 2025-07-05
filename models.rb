@@ -32,6 +32,18 @@ unless ActiveRecord::Base.connection.table_exists?(:reblogged_statuses)
   end
 end
 
+unless ActiveRecord::Base.connection.table_exists?(:hashtag_last_statuses)
+  ActiveRecord::Schema.define do
+    create_table :hashtag_last_statuses do |t|
+      t.string :hashtag_name, null: false
+      t.string :last_status_id, null: false
+      t.timestamps
+    end
+    
+    add_index :hashtag_last_statuses, :hashtag_name, unique: true
+  end
+end
+
 class Hashtag < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
@@ -42,4 +54,9 @@ class RebloggedStatus < ActiveRecord::Base
   validates :status_id, presence: true, uniqueness: true
   
   serialize :hashtags, Array
+end
+
+class HashtagLastStatus < ActiveRecord::Base
+  validates :hashtag_name, presence: true, uniqueness: true
+  validates :last_status_id, presence: true
 end

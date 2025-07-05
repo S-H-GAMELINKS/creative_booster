@@ -27,10 +27,27 @@ end
 
 hashtags.each do |hashtag|
   begin
-    statuses = client.hashtag_timeline(hashtag, limit: 10)
+    # このハッシュタグの最後に処理したステータスIDを取得
+    last_status = HashtagLastStatus.find_by(hashtag_name: hashtag)
+    since_id = last_status&.last_status_id
+
+    # since_idを使用して新しい投稿のみを取得
+    options = { limit: 100 }
+    options[:since_id] = since_id if since_id
+
+    statuses = client.hashtag_timeline(hashtag, options)
+
+    if statuses.size == 0
+      logger.info "No new statuses for hashtag: #{hashtag}"
+      next
+    end
+
     new_hashtags = []
+    latest_status_id = nil
 
     statuses.each do |status|
+      # 最新のステータスIDを記録（最初の要素が最新）
+      latest_status_id ||= status.id
       # 既にリブログ済みかチェック
       if RebloggedStatus.exists?(status_id: status.id)
         logger.info "Status #{status.id} already reblogged, skipping"
@@ -64,6 +81,19 @@ hashtags.each do |hashtag|
         Hashtag.create!(name: tag_name)
         logger.info "New hashtag learned: #{tag_name}"
       end
+    end
+
+    # 最新のステータスIDを保存
+    if latest_status_id
+      if last_status
+        last_status.update!(last_status_id: latest_status_id)
+      else
+        HashtagLastStatus.create!(
+          hashtag_name: hashtag,
+          last_status_id: latest_status_id
+        )
+      end
+      logger.info "Updated last status ID for hashtag #{hashtag}: #{latest_status_id}"
     end
 
   rescue => e
