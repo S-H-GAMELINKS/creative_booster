@@ -19,8 +19,27 @@ unless ActiveRecord::Base.connection.table_exists?(:hashtags)
   end
 end
 
+unless ActiveRecord::Base.connection.table_exists?(:reblogged_statuses)
+  ActiveRecord::Schema.define do
+    create_table :reblogged_statuses do |t|
+      t.string :status_id, null: false
+      t.text :hashtags
+      t.timestamps
+    end
+    
+    add_index :reblogged_statuses, :status_id, unique: true
+    add_index :reblogged_statuses, :created_at
+  end
+end
+
 class Hashtag < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
   scope :active, -> { where(active: true) }
+end
+
+class RebloggedStatus < ActiveRecord::Base
+  validates :status_id, presence: true, uniqueness: true
+  
+  serialize :hashtags, Array
 end
