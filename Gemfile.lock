@@ -41,9 +41,6 @@ GEM
     bigdecimal (3.2.2)
     buftok (0.3.0)
     builder (3.2.4)
-    clockwork (3.0.2)
-      activesupport
-      tzinfo
     concurrent-ruby (1.1.10)
     crass (1.0.6)
     domain_name (0.5.20190701)
@@ -115,7 +112,6 @@ DEPENDENCIES
   activerecord (~> 7.0)
   base64 (~> 0.3.0)
   bigdecimal (~> 3.2)
-  clockwork
   dotenv-rails
   mastodon-api!
   mutex_m (~> 0.3.0)
