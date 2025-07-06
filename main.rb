@@ -43,7 +43,6 @@ hashtags.each do |hashtag|
       next
     end
 
-    new_hashtags = []
     latest_status_id = nil
 
     statuses.each do |status|
@@ -66,22 +65,7 @@ hashtags.each do |hashtag|
         hashtags: status_hashtags
       )
 
-      # ハッシュタグを収集
-      new_hashtags.concat(status_hashtags) if status_hashtags.any?
-
       logger.info "Reblogged status #{status['id']} with hashtags: #{status_hashtags.join(', ')}"
-    end
-
-    # 一括でハッシュタグを処理
-    if new_hashtags.any?
-      unique_hashtags = new_hashtags.uniq
-      existing_hashtags = Hashtag.where(name: unique_hashtags).pluck(:name)
-      hashtags_to_create = unique_hashtags - existing_hashtags
-
-      hashtags_to_create.each do |tag_name|
-        Hashtag.create!(name: tag_name)
-        logger.info "New hashtag learned: #{tag_name}"
-      end
     end
 
     # 最新のステータスIDを保存
